@@ -1,0 +1,39 @@
+<!-- El elemento html canvas se puede utilizar para dibujar graficos atra vez de secuencias de comando su uso mas  comun son los  graficos , composiciones de fotos  y animaciones-->    
+<!--El evento loadevent: se dispara cuando toda  la  pagina ha sido cargada, incluyendo todos los  recursos como hojas de estilo o imagen-->
+<!--Drawing Context: Es un objeto pre construido, que contiene todos los metodos y propiedades que nos  permiten dibujar y animar colores formas y otros graficos dentro del camvas html.
+para ello, tenemos  que utilizar un metodo especial llamado GETCONTEXT referenciado al elemento canvas y pasarle como parametro el tipo de contenido, por ejemplo 2b-->
+<!--Javascropt es un lenguaje  de programacion orientado a objetos basado en prototipos, lo que significa que no utiliza clases podemos  usar la  sintaxis Jacascript moderna donde utilizamos
+ azucar sintetica, que es la  forma de utilizar sintaxis limpia que imita las clases usadas en otros  lenguajes de programación pero en el fondo seguimos trabajando con prototipos-->
+ <!--CONSTRUCTOR: Es un metodo especial en las clases de JavaScrtip. Cuando llamamos una clase con la  plabra  New, el constructor crea un nuevo objeto y le asigna  propiedades y valores basados en el prototipo -->
+ <!--Objetos en JavaScript: Tambien son llamdos  tipos de datos de referencia  lo que significa que son dinamicos  por naturaleza-->
+ <!--requestAnimationFrame(): Le dice al navegador que deseamos llevar acabo una animacion que el navegador mande  a llamar una funcion especifica para actualizar una animacion
+antes del siguiente repintado  -->
+ <!--IndexOf: Este metodo regresa el primer indice donde se encuentre un elemento dado en el array o regresa -1 en caso de no encontrarlo-->
+ <!--Includes: Este metodo determina si un array contiene cierto valor en alguno de sus elementos regresando true en tal caso o false sin ningun elemento es igual al enviado como parametro-->
+ <!--Filter: Este metodo crea un nuevo array con todos los elementos que logren pasar cierta condicion proporciondad por la  funcion-->
+ <!--DELTATIME: Es la diferencia en milisegundos entre la fecha  y hora actual de la  itereacion y la fechay hora de la anterior-->
+ <!--TIMESTAMP:Numero de segundos  transcurridos desde el primero de enero de 1970-->
+ <!--LASTTIME: Su trabajo sera guardar eñ timestamp de la  animacion anterior-->    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Game</title>
+</head>
+<body>
+    <canvas id="canvas1"></canvas>
+    <img id="player"  src="assets/player.png">
+    <img id="angler1" src="assets/angler1.png">
+    <img id="angler2" src="assets/angler2.png">
+    <img id="lucky"   src="assets/lucky.png">
+    <img id="layer1"  src="assets/layer1.png">
+    <img id="layer2"  src="assets/layer2.png">
+    <img id="layer3"  src="assets/layer3.png">
+    <img id="layer4"  src="assets/layer4.png">
+    
+    <script src="script.js"></script>
+</body>
+</html>
