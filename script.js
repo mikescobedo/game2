@@ -15,25 +15,26 @@ class Gato{
 const gato =  new Gato();*/
 
 
-
+//Se crea un evento en el cual se le pasan el tamaño al canvas
 window.addEventListener('load', function(){
-    const canvas = document.getElementById('canvas1');
-    const ctx = canvas.getContext("2d")
-    canvas.width = 500;
-    canvas.height = 500;
+    const canvas = document.getElementById('canvas1'); //Se obtine el elemento por medio del id asignado
+    const ctx = canvas.getContext("2d") 
+    canvas.width = 1000; // Se asigna la medida para el ancho
+    canvas.height = 500; //Se asigna la medida para altura 
 
+    // Se crea la  clase para poder manipular cuando se oprima una tecla
     class InputHandler{
         constructor(game){
             this.game = game;
-            window.addEventListener('keydown', e =>{
-                if(( (e.key==='ArrowUp') || 
-                     (e.key==='ArrowDown')
-                ) && this.game.keys.indexOf(e.key) === -1){
-                    this.game.keys.push(e.key);
-                }else if(e.key === ' '){
-                    this.game.player.shootTop()
-                }else if(e.key  === 'd'){
-                    this.game.debug = !this.game.debug
+            window.addEventListener('keydown', e =>{  // Se crea el Listener  cuando se aprime una tecla
+                if(( (e.key==='ArrowUp') ||  // Si la tecla felcha arriba se presiona
+                     (e.key==='ArrowDown')  // Si la  tecla flecha abajo de suelta
+                ) && this.game.keys.indexOf(e.key) === -1){ // Esta recorrera el arreglo
+                    this.game.keys.push(e.key);   
+                }else if(e.key === ' '){ //Si la tecla barra espaceadora se activa 
+                    this.game.player.shootTop() // Esta llamara la funcion para disparar
+                }else if(e.key  === 'd'){ // Si se presiona la tecla d 
+                    this.game.debug = !this.game.debug //entrara un modo debug en el cual se podra visualizar  un recuadro
                 }
             });
 
@@ -45,47 +46,48 @@ window.addEventListener('load', function(){
             })
         }
     }
-
+    // Se crea la clase projectile
     class Projectile{
         constructor(game, x, y ){
-            this.game = game;
-            this.x = x;
-            this.y = y;
-            this.width = 10;
-            this.height = 3;
-            this.speed = 3;
-            this.markedForDeletion = false
+            this.game = game; // se manda a llamar la clase game
+            this.x = x; // se declara la variable x 
+            this.y = y; // Se declara la variable y
+            this.width = 10; // Se le asigna la medida de ancho
+            this.height = 3; // se asgina la medidad de alto
+            this.speed = 6; // se le asigna la velocidad
+            this.markedForDeletion = false // Se crea la vairable para eliminar. Inicializando en false
             
         }
 
         update(){
-            this.x += this.speed;
+            this.x += this.speed; 
             if(this.x > this.game.width * 0.8){
                 this.markedForDeletion = true
             }
         }
+        // se pintan los  projectiles de color rojo 
         draw(context){
-            context.fillStyle = 'yellow';
+            context.fillStyle = 'red'; 
             context.fillRect(this.x,this.y,this.width,this.height);
         }
     }
-
+    //se crea la  clase player
     class Player {
         constructor(game){
-            this.game = game;
-            this.width = 120;
-            this.height = 190;
-            this.x = 20;
-            this.y = 100;
-            this.frameX = 0;
-            this.frameY = 1;
-            this.speedY = 0;
-            this.maxSpeed = 1; 
-            this.projectiles = [];
-            this.image = document.getElementById('player');
-            this.maxFrame = 37;         
+            this.game = game; // se declara la  vairable
+            this.width = 120; // se declara la  medida de alto
+            this.height = 190; // Se declara la  medida de ancho 
+            this.x = 20; // Se delcara la variable x Con un valor de 20
+            this.y = 100; // Se declara y con un valor  inicial de 100 
+            this.frameX = 0; // Se declara el frameX 
+            this.frameY = 1; // Se declara el frameY
+            this.speedY = 0; // Se declara la variable para controlar la velocidad
+            this.maxSpeed = 1; // Se declara una  velocidad  maxima
+            this.projectiles = []; // Se crea un arreglo para los  projectiles
+            this.image = document.getElementById('player'); // Se agina una imagen para el jugador
+            this.maxFrame = 37; // Se asigna un valor  maximo para el maxFrame  
         }
-
+        //Se actualiza cuando se oprimen las teclas  arriba, abajo 
         update(){
             if(this.game.keys.includes('ArrowUp')){
                 this.speedY = -this.maxSpeed;
@@ -109,24 +111,23 @@ window.addEventListener('load', function(){
                 this.frameX = 0;
             }
         }
-
+            //Se pinta el jugador
         draw(context){
-            //this.black = this.black?false:true
             if(this.game.debug)context.strokeRect(this.x,this.y, this.width,this.height);  
-            context.drawImage(this.image,
-                this.frameX*this.width,
-                this.frameY*this.height,
-                this.width, this.height,
+            context.drawImage(this.image, //Se toma la  imagen asignada
+                this.frameX*this.width, // se multiplican los valores que  tiene cada vairiable
+                this.frameY*this.height,// se multiplican los valores que  tiene cada vairiable
+                this.width, this.height,// se multiplican los valores que  tiene cada vairiable
                 this.x,this.y,
                 this.width,this.height
                 )      
-            this.projectiles.forEach(projectile => {
-                projectile.draw(context);
+            this.projectiles.forEach(projectile => { // Se pintan el uso de los  projectiles 
+                projectile.draw(context); // Se pinta el projectile
             });          
         }
 
         
-
+        // Se crea la funcion en la  cual creamos las balas para el juego
         shootTop(){
             if(this.game.ammo >0){
                 this.projectiles.push(new Projectile(this.game, this.x+80, this.y+30));
@@ -135,19 +136,21 @@ window.addEventListener('load', function(){
         }
     }
 
+    // Se crea la clase Enemy
     class Enemy{
         constructor(game){
-            this.game = game;
-            this.x = this.game.width;
-            this.speedX = Math.random()*-1.5-0.5;
-            this.markedForDeletion = false;
-            this.lives = 5;
-            this.score = this.lives;
-            this.frameX = 0;
-            this.frameY = 0;
-            this.maxFrame = 37;
+            this.game = game; // se llama la  clase game
+            this.x = this.game.width; // se crea la variable x que va  ser  igual a las medidas del with de la clase game
+            this.speedX = Math.random()*-1.5-0.5; // Se crea una valocidad variable para los  enemigos
+            this.markedForDeletion = false; // Se declara la variable para eliminarlos inicializandola en false
+            this.lives = 10; // Se crea la variable de vidas con las que cuenta cada enemigo
+            this.score = this.lives; // Se declara la  variable  score las cuales seran tomadas de los puntos de vida de los  enemigos 
+            this.frameX = 0; // se declara la vairable
+            this.frameY = 0; // se declara la vairable
+            this.maxFrame = 37; // Se declara un maximo
         }
 
+        // se crea la funcion update la cual nos servira para ir  acutualizando a nuestros enemigos. 
         update(){
             this.x += this.speedX;
             if(this.x + this.width < 0){
@@ -159,7 +162,7 @@ window.addEventListener('load', function(){
                 this.frameX=0
             }
         }
-
+        // Se crea la funcion en  la cual estaremos  pintando nuestros elementos requeridos
         draw(context){
             if(this.game.debug) context.strokeRect(this.x, this.y, this.width, this.height);
             context.drawImage(this.image,
@@ -170,20 +173,21 @@ window.addEventListener('load', function(){
                  this.width, this.height
 
                 );
-            context.font = '20px Helvetica';
+            context.font = '20px Helvetica'; // Se le asigna una  tipografia y un tamaño a la fuente
             context.fillText(this.lives, this.x, this.y);
         }
     }
-
+   
+    // Se crea la  clase Layer
     class Layer {
         constructor(game, image, speedModifier){
-            this.game = game;
-            this.image = image;
-            this.speedModifier = speedModifier;
-            this.width = 1768;
-            this.height = 500;
-            this.x = 0;
-            this.y = 0;
+            this.game = game; // se manda a llamar a la clase game
+            this.image = image; // se declara la vairable con la  cual podremos hacer uso de la  imagen
+            this.speedModifier = speedModifier; // // se declara la vairable con la cual podremos modificar la  velocidad
+            this.width = 1768; // se declara la vairable para la medida de altura
+            this.height = 500; // se declara la vairable para la  variable  de ancho
+            this.x = 0;// se declara la vairable x
+            this.y = 0;// se declara la vairable y
         }
 
         update(){
@@ -191,6 +195,7 @@ window.addEventListener('load', function(){
              this.x -= this.game.speed*this.speedModifier;
         }
 
+        //Se crea la funcion para piintar los elementos creados en esta clase 
         draw(context){
             context.drawImage(this.image,this.x,this.y);
             context.drawImage(this.image,this.x + this.width, this.y);
@@ -198,37 +203,37 @@ window.addEventListener('load', function(){
 
     }
 
-
+    // Se crea la clase background en la cual podremos definir el fondo de nuestro jeugo
     class Background{
         constructor(game){
-            this.game = game;
-            this.image1 = document.getElementById('layer1');
-            this.image2 = document.getElementById('layer2');
-            this.image3 = document.getElementById('layer3');
-            this.image4 = document.getElementById('layer4');
-            this.layer1 = new Layer(this.game, this.image1, 0.2);
-            this.layer2 = new Layer(this.game, this.image2, 0.4);
-            this.layer3 = new Layer(this.game, this.image3, 1.2);
-            this.layer4 = new Layer(this.game, this.image4, 1.7);
+            this.game = game; // se declara la vairable game con la cual mandamos a llamar a esa clase
+            this.image1 = document.getElementById('layer1'); // se declara la vairable image1 con la cual asignamos la  imagen
+            this.image2 = document.getElementById('layer2'); // se declara la vairable image2 con la cual asignamos la  imagen
+            this.image3 = document.getElementById('layer3'); // se declara la vairable image3 con la cual asignamos la  imagen
+            this.image4 = document.getElementById('layer4'); // se declara la vairable image con la cual asignamos la  imagen
+            this.layer1 = new Layer(this.game, this.image1, 0.2);  // Se crea un layer en la cual se le  asigna la velocidad de cada imagen
+            this.layer2 = new Layer(this.game, this.image2, 0.4);  // Se crea un layer en la cual se le  asigna la velocidad de cada imagen
+            this.layer3 = new Layer(this.game, this.image3, 1.2);  // Se crea un layer en la cual se le  asigna la velocidad de cada imagen
+            this.layer4 = new Layer(this.game, this.image4, 1.7);  // Se crea un layer en la cual se le  asigna la velocidad de cada imagen
 
-            this.layers = [this.layer1, this.layer2, this.layer3];
+            this.layers = [this.layer1, this.layer2, this.layer3]; // se crea el arreglo de nuestras imagenes
         }
-
+        // Se crea la clase update para los layers
         update(){
             this.layers.forEach(layer => layer.update());
         }
-
+        // Se pintan lo componentes creados en esta clase 
         draw(context){
             this.layers.forEach(layer => layer.draw(context));
         }
     }
-
+        // Clase para crear la interfaz
     class UI{
         constructor(game){
-            this.game = game;
-            this.fontSize = 25;
-            this.fontFamily= 'Helvetica';
-            this.color = 'white'
+            this.game = game; // Se manda a llamar la clase game 
+            this.fontSize = 30; //Se asigna un tamaño de fuente
+            this.fontFamily= 'Helvetica'; // Se asigna una tipografia
+            this.color = 'yellow' // se asgina el color al contador de balas y tiempo
         }
         
         draw(context){
@@ -236,7 +241,7 @@ window.addEventListener('load', function(){
             context.fillStyle = this.color;
             context.shadowOffsetX = 2;
             context.shadowOffsetY = 2;
-            context.shadowColor = 'black';
+            context.shadowColor = 'blue';
             context.font = this.fontSize + ' px '+this.fontFamily;
             context.fillText('Score: '+this.game.score,20,40);
             
@@ -259,10 +264,10 @@ window.addEventListener('load', function(){
                     message2 = 'Try again!'
                 }
             
-                context.font = '50px '+this.fontFamily;
+                context.font = '60px '+this.fontFamily;
                 context.fillText(message1, this.game.width*0.5,this.game.height*0.5-20);
 
-                context.font = '25px '+this.fontFamily;
+                context.font = '30px '+this.fontFamily;
                 context.fillText(message2, this.game.width*0.5, this.game.height*0.5+20);
 
             }
@@ -294,15 +299,15 @@ window.addEventListener('load', function(){
             this.ammo = 20;
             this.ammoTimer = 0;
             this.ammoInterval = 500;
-            this.maxAmmo = 50;
+            this.maxAmmo = 90;
             this.enemies= [];
             this.enemyTimer = 0;
             this.enmyInterval = 500;
             this.gameOver = false;
             this.score = 0;
-            this.winningScore = 10;
+            this.winningScore = 15;
             this.gameTime= 0;
-            this.timeLimit = 15000;
+            this.timeLimit = 25000;
             this.speed = 1;
             this.debug = false;
         }
